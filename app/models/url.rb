@@ -1,7 +1,10 @@
 class Url < ApplicationRecord
   before_validation :generate_slug
+  before_save :set_url_expiry
 
   SLUG_LENGTH = (6..10).freeze
+  EXPIRY_LENGTH_DAYS = 365.freeze
+  CHAR_SET = [('a'..'z'), ('A'..'Z'), (0..9)].map(&:to_a).push('-').flatten
 
   validates :original, presence: true
   validate :validate_url_format
@@ -42,6 +45,10 @@ class Url < ApplicationRecord
 
   private
 
+  def set_url_expiry
+    self.expired_at = EXPIRY_LENGTH_DAYS.days.from_now
+  end
+
   def validate_url_format
     errors.add(:original, "url is not valid") unless valid_url?
   end
@@ -53,7 +60,7 @@ class Url < ApplicationRecord
       self.is_custom = false
 
       5.times do |i|
-        self.slug = SecureRandom.urlsafe_base64(6)
+        self.slug = SecureRandom.send(:choose, CHAR_SET, 6)
         return if self.class.where(slug: slug ).none?
       end
     end
