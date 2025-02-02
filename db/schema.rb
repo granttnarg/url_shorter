@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_02_161226) do
     t.string "original"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "expired_at"
+    t.datetime "expires_at"
     t.boolean "is_custom"
     t.index ["slug"], name: "index_urls_on_slug", unique: true
   end
