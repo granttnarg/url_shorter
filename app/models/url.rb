@@ -1,7 +1,7 @@
 class Url < ApplicationRecord
   before_validation :generate_slug
 
-  SLUG_LENGTH = 6..10.freeze
+  SLUG_LENGTH = (6..10).freeze
 
   validates :original, presence: true
   validate :validate_url_format
@@ -43,13 +43,15 @@ class Url < ApplicationRecord
   private
 
   def validate_url_format
-    add.errors(:original, "url is not valid") unless valid_url?
+    errors.add(:original, "url is not valid") unless valid_url?
   end
 
   def generate_slug
     return unless slug.nil?
 
     self.class.transaction do
+      self.is_custom = false
+
       5.times do |i|
         self.slug = SecureRandom.urlsafe_base64(6)
         return if self.class.where(slug: slug ).none?
