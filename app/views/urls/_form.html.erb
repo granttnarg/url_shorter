@@ -1,0 +1,23 @@
+<%= form_with(model: @url) do |f| %>
+  <% if @url.errors.any? %>
+    <div>
+      <h2><%= pluralize(@url.errors.count, "error") %> prohibited this URL from being saved:</h2>
+      <ul>
+        <% @url.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ <div>
+   <%= f.label :original, "URL" %>
+   <%= f.text_field :original %>
+ </div>
+
+ <div>
+   <%= f.label :slug, "Custom URL (optional)" %>
+   <%= f.text_field :slug %>
+ </div>
+
+ <%= f.submit "Create Short URL" %>
+<% end %>
