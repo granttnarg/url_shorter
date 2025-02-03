@@ -15,8 +15,9 @@
  </div>
 
  <div>
-   <%= f.label :slug, "Custom URL (optional)" %>
+   <%= f.label :slug, "Custom URL (optional)*" %>
    <%= f.text_field :slug %>
+   <p>* Custom URLs are generated when left blank</p>
  </div>
 
  <%= f.submit "Create Short URL" %>

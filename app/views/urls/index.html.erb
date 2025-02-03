@@ -1,4 +1,8 @@
 <h1>Saved Urls</h1>
+<% if @urls.nil? %>
+  <p>Your currently have no tiny urls ...</p>
+<% end %>
+<%= button_to "Create New Tiny Url", new_url_path, method: :get %>
 <% @urls.each do |url| %>
   <%= render "url", url: url %>
 <% end %>

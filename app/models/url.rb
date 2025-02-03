@@ -2,6 +2,8 @@ class Url < ApplicationRecord
   before_validation :set_slug
   before_save :set_url_expiry
 
+  belongs_to :user
+
   validates :original, presence: true
   validate :validate_url_format
   validates :slug, presence: true, uniqueness: true, length:

@@ -1,9 +1,9 @@
 class UrlsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :index, :show]
+  before_action :authenticate_user!, except: [:redirect]
 
   def redirect
-    @url = find_url
-    if @url.nil? || !@url.valid_url?
+    @url = Url.find_by_slug!(params[:id])
+    unless @url.valid_url?
       not_found
     else
       page = @url.original
@@ -12,8 +12,8 @@ class UrlsController < ApplicationController
     redirect_to page, allow_other_host: true
   end
 
-  def index;
-    @urls = Url.all
+  def index
+    @urls = current_user.urls
   end
 
   def show
@@ -25,7 +25,7 @@ class UrlsController < ApplicationController
   end
 
   def create
-    @url = Url.new(url_params)
+    @url = current_user.urls.build(url_params)
 
     if @url.save
       redirect_to url_path(@url), notice: 'URL was successfully created'
@@ -41,7 +41,7 @@ class UrlsController < ApplicationController
   private
 
   def find_url
-    Url.find_by_slug!(params[:id])
+    current_user.urls.find_by_slug!(params[:id])
   end
 
   def not_found
