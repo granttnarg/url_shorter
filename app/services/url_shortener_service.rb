@@ -1,4 +1,4 @@
-class UrlShortenerService
+class UrlShortenerService < ApplicationService
   class SlugGenerationError < StandardError; end
 
   SLUG_LENGTH = (6..10).freeze

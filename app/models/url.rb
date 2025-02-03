@@ -39,7 +39,6 @@ class Url < ApplicationRecord
     UrlShortenerService.new(self).set_expiry
   end
 
-  private
 
   def valid_url?
       uri = URI.parse(original)
@@ -47,6 +46,8 @@ class Url < ApplicationRecord
     rescue URI::InvalidURIError
       false
   end
+
+  private
 
   def validate_url_format
     errors.add(:original, "url is not valid") unless valid_url?

@@ -1,7 +1,1 @@
-
-<h1>URL Details</h1>
-<%= render "flash" %>
-<div>
- <p>Original URL: <%= @url.original %></p>
- <p>Short URL: <%= "http://localhost:3000/#{@url.slug}" %></p>
-</div>
+<%= render "url", url: @url %>

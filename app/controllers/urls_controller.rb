@@ -1,4 +1,6 @@
 class UrlsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :index, :show]
+
   def redirect
     @url = find_url
     if @url.nil? || !@url.valid_url?
@@ -8,6 +10,10 @@ class UrlsController < ApplicationController
     end
 
     redirect_to page, allow_other_host: true
+  end
+
+  def index;
+    @urls = Url.all
   end
 
   def show

@@ -1,0 +1,8 @@
+<%= render "flash" %>
+<h1>___</h1>
+<div>
+ <p>Original URL: <%= url&.original %></p>
+ <p>Short URL: <%= "http://localhost:3000/#{url&.slug}" %></p>
+ <%= link_to "Test in New Tab", "http://localhost:3000/#{url&.slug}", target: "_blank", rel: "noopener" %>
+
+</div>
