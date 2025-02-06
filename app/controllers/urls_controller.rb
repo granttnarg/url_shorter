@@ -28,6 +28,10 @@ class UrlsController < ApplicationController
     @url = current_user.urls.build(url_params)
 
     if @url.save
+      # TODO:
+      # check if url.original is safe
+      # if unsafe, update record with warning of some kinda
+      # if safe queue on background job to get meta_data
       redirect_to url_path(@url), notice: 'URL was successfully created'
     else
       render :new, status: :unprocessable_entity, notice: "Url Generation Failed"

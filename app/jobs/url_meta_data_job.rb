@@ -18,7 +18,7 @@ class UrlMetaDataJob < ApplicationJob
       return
     end
 
-    url.update(meta_title: result[:title], meta_description: result[:description])
+    url.update!(meta_title: result[:title], meta_description: result[:description])
     Rails.logger.info("Metadata job successful for #{url.id}")
   end
 end
