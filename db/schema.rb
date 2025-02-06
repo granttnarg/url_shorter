@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_03_195845) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_06_154152) do
   create_table "urls", force: :cascade do |t|
     t.string "slug", null: false
     t.string "original"
@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_03_195845) do
     t.datetime "expires_at"
     t.boolean "is_custom"
     t.integer "user_id"
+    t.string "meta_title"
+    t.text "meta_description"
     t.index ["slug"], name: "index_urls_on_slug", unique: true
     t.index ["user_id"], name: "index_urls_on_user_id"
   end

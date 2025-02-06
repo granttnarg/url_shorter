@@ -38,6 +38,17 @@ class SslCheckerService
     "Ed448"
   ]
 
+  ## MIGHT BE WORTH ADDING THIS TOO?
+
+  # def safe_url?
+  #   uri = URI.parse(original)
+  #   response = HTTP.get("https://safebrowsing.googleapis.com/v4/threatMatches:find",
+  #     params: { key: GOOGLE_API_KEY },
+  #     json: { threatInfo: { ... } }
+  #   )
+  #   response["matches"].empty?
+  # end
+
   def self.check_ssl(domain, port = 443)
     init_result = ssl_initialize(domain, port)
     init_result.ssl.connect
