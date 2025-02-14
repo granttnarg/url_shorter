@@ -24,5 +24,6 @@ module MiniUrlApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.x.google_safe_browsing_api_key = ENV.fetch('GOOGLE_SAFE_BROWSING_API_KEY')
   end
 end
