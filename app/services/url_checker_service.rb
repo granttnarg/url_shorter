@@ -1,7 +1,8 @@
 require 'socket'
 require 'openssl'
+require 'httparty'
 
-class SslCheckerService
+class UrlCheckerService
 
   TRUSTED_ISSUERS = [
     "DigiCert",
@@ -37,17 +38,12 @@ class SslCheckerService
     "Ed25519",
     "Ed448"
   ]
+  SAFE_BROWSING_API_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find'
+  UNSAFE_URL_FOR_TESTING = "http://malware.testing.google.test/testing/malware/"
 
-  ## MIGHT BE WORTH ADDING THIS TOO?
-
-  # def safe_url?
-  #   uri = URI.parse(original)
-  #   response = HTTP.get("https://safebrowsing.googleapis.com/v4/threatMatches:find",
-  #     params: { key: GOOGLE_API_KEY },
-  #     json: { threatInfo: { ... } }
-  #   )
-  #   response["matches"].empty?
-  # end
+  def initialize
+    @api_key = Rails.configuration.x.google_safe_browsing_api_key
+  end
 
   def self.check_ssl(domain, port = 443)
     init_result = ssl_initialize(domain, port)
@@ -72,7 +68,37 @@ class SslCheckerService
     { valid?: false, error: 'connection_error' }
   end
 
+  def check_url_safelist(url = nil)
+    body = JSON.generate(payload(url))
+    headers = { 'Content-Type' => 'application/json' }
+    response = HTTParty.post("#{SAFE_BROWSING_API_URL}?key=#{@api_key}", body:, headers:)
+
+    response["matches"].nil?
+  end
+
   private
+
+  def payload(url)
+      {
+    "client": {
+      "clientId": "url-test-app",
+      "clientVersion": "1.0"
+    },
+    "threatInfo": {
+      "threatTypes": [
+        "MALWARE",
+        "SOCIAL_ENGINEERING",
+        "UNWANTED_SOFTWARE",
+        "POTENTIALLY_HARMFUL_APPLICATION"
+      ],
+      "platformTypes": ["ANY_PLATFORM"],
+      "threatEntryTypes": ["URL"],
+      "threatEntries": [
+        {"url": url || UrlCheckerService::UNSAFE_URL_FOR_TESTING }
+      ]
+    }
+  }
+  end
 
   def self.ssl_initialize(domain, port)
     ctx = OpenSSL::SSL::SSLContext.new
